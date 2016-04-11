@@ -7,7 +7,9 @@ The language is PHP with [PHPUnit](https://phpunit.de/)
 
 Clone the code to your development machine with PHP or use [Docker](http://docker.com) to boot up a container.
 
-Run `docker-compose build` to build the docker PHP 5.6 container and `docker-compose run application composer install` to install the dependencies with composer. Execute the tests with `docker-compose run application vendor/bin/phpunit`.
+Run `docker-compose build` to build the docker PHP 5.6 container and `docker-compose run application composer install` to install the dependencies with composer.
+
+Execute the tests with PHPUnit `docker-compose run application vendor/bin/phpunit` or Behat `docker-compose run application vendor/bin/behat`.
 
 If you don't use docker, run the above commands without `docker-compose run application`.
 
