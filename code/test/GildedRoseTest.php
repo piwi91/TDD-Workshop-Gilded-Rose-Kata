@@ -2,19 +2,24 @@
 
 namespace Kata;
 
-class GildedRoseTest extends \PHPUnit_Framework_TestCase {
+class GildedRoseTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var ItemBuilder
+     */
+    protected $itemBuilder;
 
-    function testFoo() {
-        $items = array(new Item("foo", 0, 0));
-        $gildedRose = new GildedRose($items);
-        $gildedRose->update_quality();
-        $this->assertEquals("fixme", $items[0]->name);
+    protected function setUp()
+    {
+        $this->itemBuilder = new ItemBuilder();
     }
 
-    function testFooMatcher() {
-        $items = array(new Item("foo", 0, 0));
-        $gildedRose = new GildedRose($items);
+    public function test_lower_sell_in_and_quality_for_ordinary_item()
+    {
+        $item = $this->itemBuilder->ordinaryItem()->withSellIn(5)->ofQuality(10);
+        $gildedRose = new GildedRose([$item]);
         $gildedRose->update_quality();
-        $this->assertThat($items[0]->name, $this->equalTo("fixme"));
+        $this->assertEquals(9, $item->quality);
+        $this->assertEquals(4, $item->sell_in);
     }
 }
