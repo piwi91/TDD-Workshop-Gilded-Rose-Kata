@@ -1,0 +1,19 @@
+{
+    "name": "codecop/GildedRose-Kata-PHP",
+    "description": "Starting code for a Testing Code Kata on the Gilded Rose.",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Peter Kofler",
+            "email": "peter.kofler@code-cop.org"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"Kata\\": "src/"}
+    },
+    "require": {
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.0"
+    }
+}
