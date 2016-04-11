@@ -11,6 +11,9 @@
     "autoload": {
         "psr-4": {"Kata\\": "src/"}
     },
+    "autoload-dev": {
+        "psr-4": {"Kata\\": "test/fixtures"}
+    },
     "require": {
     },
     "require-dev": {
