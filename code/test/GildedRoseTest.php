@@ -64,7 +64,51 @@ class GildedRoseTest extends \PHPUnit_Framework_TestCase
     // [1c, 2c, 3c, 4c] No Quality
     public function test_quality_will_not_degrade_below_0_for_ordinary_item()
     {
-        $item = $this->itemBuilder->ordinaryItem()->withSellIn(5)->ofNoQuality();
+        $item = $this->itemBuilder->ordinaryItem()->ofNoQuality();
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(0, $item);
+    }
+
+    // [1c, 2c, 3c, 4c] No Quality
+    public function test_quality_will_not_degrade_below_0_for_expired_ordinary_item()
+    {
+        $item = $this->itemBuilder->expired()->ordinaryItem()->ofNoQuality();
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(0, $item);
+    }
+
+    // Boundary
+    public function test_quality_hits_zero_for_ordinary_item()
+    {
+        $item = $this->itemBuilder->ordinaryItem()->ofQuality(1);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(0, $item);
+    }
+
+    // Boundary
+    public function test_quality_hits_zero_for_expired_ordinary_item_with_one_quality()
+    {
+        $item = $this->itemBuilder->expired()->ordinaryItem()->ofQuality(1);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(0, $item);
+    }
+
+    // Boundary
+    public function test_quality_hits_zero_for_expired_ordinary_item()
+    {
+        $item = $this->itemBuilder->expired()->ordinaryItem()->ofQuality(2);
         $gildedRose = new GildedRose([$item]);
 
         $gildedRose->update_quality();
