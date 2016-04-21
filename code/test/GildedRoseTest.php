@@ -412,11 +412,11 @@ class GildedRoseTest extends \PHPUnit_Framework_TestCase
     /** Helper methods */
     private function assertThatSellInIs($value, Item $item)
     {
-        $this->assertEquals($item->sell_in, $value);
+        $this->assertEquals($value, $item->sell_in);
     }
 
     private function assertThatQualityIs($value, Item $item)
     {
-        $this->assertEquals($item->quality, $value);
+        $this->assertEquals($value, $item->quality);
     }
 }
