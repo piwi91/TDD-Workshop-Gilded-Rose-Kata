@@ -239,7 +239,175 @@ class GildedRoseTest extends \PHPUnit_Framework_TestCase
         $gildedRose->update_quality();
 
         $this->assertThatQualityIs(10, $item);
-    }   
+    }
+
+    // [1a]
+    public function test_lower_sell_in_and_upper_quality_for_backstage_pass()
+    {
+        $item = $this->itemBuilder->backstagePass()->withSellIn(20)->ofQuality(10);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatSellInIs(19, $item);
+        $this->assertThatQualityIs(11, $item);
+    }
+
+    // increase quality by 2 when sell in is 10 days or less
+    public function test_quality_increases_twice_as_fast_for_backstage_pass_with_sell_in_lower_then_10()
+    {
+        $item = $this->itemBuilder->backstagePass()->withSellIn(8)->ofQuality(10);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(12, $item);
+    }
+
+    // increase quality by 2 when sell in is 10 days (boundary)
+    public function test_quality_increases_twice_as_fast_for_backstage_pass_with_sell_in_10()
+    {
+        $item = $this->itemBuilder->backstagePass()->withSellIn(10)->ofQuality(10);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(12, $item);
+    }
+
+    // increase quality by 3 when sell in is 5 days or less
+    public function test_quality_increases_3_times_as_fast_for_backstage_pass_with_sell_in_lower_then_5()
+    {
+        $item = $this->itemBuilder->backstagePass()->withSellIn(3)->ofQuality(10);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(13, $item);
+    }
+
+    // increase quality by 3 when sell in is 5 days (boundary)
+    public function test_quality_increases_3_times_as_fast_for_backstage_pass_with_sell_in_5()
+    {
+        $item = $this->itemBuilder->backstagePass()->withSellIn(3)->ofQuality(10);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(13, $item);
+    }
+
+    // quality drops to zero when expired
+    public function test_quality_drops_to_zero_for_expired_backstage_pass()
+    {
+        $item = $this->itemBuilder->expired()->backstagePass()->ofQuality(10);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(0, $item);
+    }
+
+    // boundary
+    public function test_quality_increases_for_almost_expired_backstage_pass()
+    {
+        $item = $this->itemBuilder->almostExpired()->backstagePass()->ofQuality(10);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(13, $item);
+    }
+
+    public function test_quality_drops_to_zero_for_just_expired_backstage_pass()
+    {
+        $item = $this->itemBuilder->justExpired()->backstagePass()->ofQuality(10);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(0, $item);
+    }
+
+    public function test_quality_hits_50_for_backstage_pass_with_almost_max_quality()
+    {
+        $item = $this->itemBuilder->backstagePass()->withSellIn(20)->ofQuality(49);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(50, $item);
+    }
+
+    public function test_quality_is_50_for_backstage_pass_with_max_quality()
+    {
+        $item = $this->itemBuilder->backstagePass()->withSellIn(8)->ofMaxQuality();
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(50, $item);
+    }
+
+    public function test_quality_increases_with_one_for_backstage_pass_with_sell_in_lower_then_10()
+    {
+        $item = $this->itemBuilder->backstagePass()->withSellIn(8)->ofQuality(49);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(50, $item);
+    }
+
+    public function test_quality_hits_50_for_backstage_pass_with_sell_in_lower_then_10()
+    {
+        $item = $this->itemBuilder->backstagePass()->withSellIn(8)->ofQuality(48);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(50, $item);
+    }
+
+    public function test_quality_is_50_for_almost_expired_backstage_pass_with_max_quality()
+    {
+        $item = $this->itemBuilder->almostExpired()->backstagePass()->ofMaxQuality();
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(50, $item);
+    }
+
+    public function test_quality_increases_with_one_for_backstage_pass_with_sell_in_lower_then_5()
+    {
+        $item = $this->itemBuilder->backstagePass()->withSellIn(3)->ofQuality(49);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(50, $item);
+    }
+
+    public function test_quality_increases_with_two_for_backstage_pass_with_sell_in_lower_then_5()
+    {
+        $item = $this->itemBuilder->backstagePass()->withSellIn(3)->ofQuality(48);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(50, $item);
+    }
+
+    public function test_quality_hits_50_for_backstage_pass_with_sell_in_lower_then_5()
+    {
+        $item = $this->itemBuilder->backstagePass()->withSellIn(3)->ofQuality(47);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(50, $item);
+    }
 
     /** Helper methods */
     private function assertThatSellInIs($value, Item $item)
