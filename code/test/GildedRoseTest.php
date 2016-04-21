@@ -166,7 +166,51 @@ class GildedRoseTest extends \PHPUnit_Framework_TestCase
     // [1c, 2c, 3c, 4c] Max Quality
     public function test_quality_will_not_increase_above_50_for_max_quality_aged_brie()
     {
-        $item = $this->itemBuilder->agedBrie()->withSellIn(5)->ofMaxQuality();
+        $item = $this->itemBuilder->agedBrie()->ofMaxQuality();
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(50, $item);
+    }
+
+    // [1c, 2c, 3c, 4c] Max Quality
+    public function test_quality_will_not_increase_above_50_for_max_quality_expired_aged_brie()
+    {
+        $item = $this->itemBuilder->expired()->agedBrie()->ofMaxQuality();
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(50, $item);
+    }
+
+    // Boundary
+    public function test_quality_will_increase_with_one_for_almost_max_quality_aged_brie()
+    {
+        $item = $this->itemBuilder->agedBrie()->ofQuality(49);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(50, $item);
+    }
+
+    // Boundary
+    public function test_quality_will_increase_with_one_for_expired_aged_brie()
+    {
+        $item = $this->itemBuilder->expired()->agedBrie()->ofQuality(49);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(50, $item);
+    }
+
+    // Boundary
+    public function test_quality_will_hit_50_for_expired_aged_brie()
+    {
+        $item = $this->itemBuilder->expired()->agedBrie()->ofQuality(48);
         $gildedRose = new GildedRose([$item]);
 
         $gildedRose->update_quality();
