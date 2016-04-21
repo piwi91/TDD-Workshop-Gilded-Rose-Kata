@@ -218,6 +218,29 @@ class GildedRoseTest extends \PHPUnit_Framework_TestCase
         $this->assertThatQualityIs(50, $item);
     }
 
+    // [1a, 3a] Sell In & Of Quality
+    public function test_sell_in_and_quality_will_never_be_lowered_for_sulfuras()
+    {
+        $item = $this->itemBuilder->sulfuras()->withSellIn(5)->ofQuality(10);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatSellInIs(5, $item);
+        $this->assertThatQualityIs(10, $item);
+    }
+
+    // [4a, 2a] Expired & Of Quality
+    public function test_quality_is_not_degraded_for_expired_sulfuras()
+    {
+        $item = $this->itemBuilder->justExpired()->sulfuras()->ofQuality(10);
+        $gildedRose = new GildedRose([$item]);
+
+        $gildedRose->update_quality();
+
+        $this->assertThatQualityIs(10, $item);
+    }   
+
     /** Helper methods */
     private function assertThatSellInIs($value, Item $item)
     {
